@@ -1,27 +1,74 @@
-# NgxGamepad
+# ngx-gamepad
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 9.1.1.
+Angular [gamecontroller.js](https://www.npmjs.com/package/gamecontroller.js) wrapper service.
 
-## Development server
+[Demo](https://d3v0ps.github.io/ngx-gamepad)
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
+## Getting Started
 
-## Code scaffolding
+### 1. Install packages
+```sh
+npm i ngx-gamepad
+```
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+### 2. Import Module
+```typescript
+import { NgxGamepadModule } from 'ngx-gamepad';
 
-## Build
+@NgModule({
+  declarations: [AppComponent],
+  imports: [
+    NgxGamepadModule
+  ],
+  providers: [],
+  bootstrap: [AppComponent]
+})
+export class AppModule {}
+```
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory. Use the `--prod` flag for a production build.
+### 3. Include the service
 
-## Running unit tests
+```ts
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+import { GamepadService } from 'ngx-gamepad';
 
-## Running end-to-end tests
+export class AppComponent {
 
-Run `ng e2e` to execute the end-to-end tests via [Protractor](http://www.protractortest.org/).
+  constructor(
+    private gamepad: GamepadService
+  ){}
 
-## Further help
+  ngOnInit() {
+    this.listenToGamepad();
+  }
 
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI README](https://github.com/angular/angular-cli/blob/master/README.md).
+  private listenToGamepad() {
+    this.gamepad.connect()
+      .subscribe(() => {
+
+        this.gamepad.after('button0')
+          .subscribe(() => ...);
+
+        this.gamepad.after('select')
+          .subscribe(() => ...);
+
+        this.gamepad.after('start')
+          .subscribe(() => ...);
+
+        this.gamepad.on('right')
+          .pipe(bufferCount(10))
+          .subscribe(() => ...);
+
+        this.gamepad.on('right0')
+          .pipe(bufferCount(10))
+          .subscribe(() => ...);
+
+        this.gamepad.on('right1')
+          .pipe(bufferCount(10))
+          .subscribe(() => ...);
+      })
+  }
+
+}
+
+```
